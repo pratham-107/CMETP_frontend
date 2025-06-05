@@ -11,10 +11,12 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("adminToken");
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/events", {
+      const res = await axios.get(`${API_BASE}/events`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEvents(res.data);
@@ -28,7 +30,7 @@ export default function AdminDashboard() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/events/${id}`, {
+      await axios.delete(`${API_BASE}/events/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchEvents();
@@ -40,7 +42,7 @@ export default function AdminDashboard() {
   const handleApprove = async (id) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/events/${id}/approve`,
+        `${API_BASE}/events/${id}/approve`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -56,9 +58,12 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
-    if (!token) return navigate("/admin-login");
+    if (!token) {
+      navigate("/admin-login");
+      return;
+    }
     fetchEvents();
-  }, []);
+  }, [token, navigate]);
 
   const pendingEvents = events.filter((event) => !event.isApproved);
   const approvedEvents = events.filter((event) => event.isApproved);
@@ -88,7 +93,9 @@ export default function AdminDashboard() {
           </p>
 
           {event.isApproved && (
-            <span className="badge bg-success mb-2">Approved</span>
+            <span className="badge bg-success mb-2" aria-label="Approved event badge">
+              Approved
+            </span>
           )}
 
           {showApprove && (
@@ -123,10 +130,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dashboard container mt-4">
-      <h2 className="mb-4">
+      <h2 className="mb-4 d-flex justify-content-between align-items-center">
         📋 Admin Dashboard
         <button
-          className="btn btn-secondary float-end"
+          className="btn btn-secondary"
           onClick={handleLogout}
           aria-label="Logout"
         >

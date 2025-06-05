@@ -25,7 +25,10 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/register", formData);
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
+        formData
+      );
       alert("Registration successful!");
       navigate("/login");
     } catch (err) {

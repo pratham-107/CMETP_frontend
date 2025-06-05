@@ -16,6 +16,8 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
   const currentUserId = JSON.parse(atob(token?.split(".")[1] || "{}")).id;
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
   };
@@ -25,7 +27,7 @@ export default function Dashboard() {
 
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/events", {
+        const res = await axios.get(`${API_BASE}/events`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEvents(res.data);

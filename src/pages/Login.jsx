@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AOS from "aos";
@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   // Init AOS on mount
-  useState(() => {
+  useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
 
@@ -22,7 +22,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
         formData
       );
       localStorage.setItem("token", res.data.token);

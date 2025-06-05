@@ -8,16 +8,15 @@ export default function AdminLogin() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/admin/login",
-        formData
-      );
+      const res = await axios.post(`${API_BASE}/admin/login`, formData);
       localStorage.setItem("adminToken", res.data.token);
       localStorage.setItem("adminName", res.data.name);
       navigate("/admin-dashboard");

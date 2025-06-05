@@ -20,9 +20,11 @@ export default function Events() {
   const token = localStorage.getItem("token");
   const currentUserId = JSON.parse(atob(token?.split(".")[1] || "{}")).id;
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const fetchEvents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/events");
+      const res = await axios.get(`${API_BASE}/events`);
       setEvents(res.data);
     } catch (err) {
       alert("Failed to load events");
@@ -59,7 +61,7 @@ export default function Events() {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/events", formData, {
+      await axios.post(`${API_BASE}/events`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFormData({
@@ -77,7 +79,7 @@ export default function Events() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/events/${id}`, {
+      await axios.delete(`${API_BASE}/events/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchEvents();
