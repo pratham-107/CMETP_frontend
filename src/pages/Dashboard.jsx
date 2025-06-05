@@ -6,7 +6,7 @@ import "aos/dist/aos.css";
 import EventCard from "../components/EventCard";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "../styles/dashboard.css";
+import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
