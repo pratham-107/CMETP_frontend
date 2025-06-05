@@ -5,36 +5,44 @@ import axios from "axios";
 
 export default function EventCard({ event, onDelete, currentUserId }) {
   const [rsvped, setRsvped] = useState(false);
-  const [rsvpCount, setRsvpeCount] = useState(event.rsvpUsers?.length || 0);
+  const [rsvpCount, setRsvpCount] = useState(event.rsvpUsers?.length || 0);
+  const [loading, setLoading] = useState(false);
+
   const token = localStorage.getItem("token");
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    if (event.rsvpUsers?.includes(currentUserId)) {
+    if (currentUserId && event.rsvpUsers?.includes(currentUserId)) {
       setRsvped(true);
+    } else {
+      setRsvped(false);
     }
   }, [event.rsvpUsers, currentUserId]);
 
   const handleRSVP = async () => {
+    if (loading) return;
+    setLoading(true);
     try {
       if (!rsvped) {
         const res = await axios.post(
-          `http://localhost:5000/api/events/${event._id}/rsvp`,
+          `${API_BASE}/events/${event._id}/rsvp`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setRsvped(true);
-        setRsvpeCount(res.data.rsvpCount);
+        setRsvpCount(res.data.rsvpCount);
       } else {
-        const res = await axios.delete(
-          `http://localhost:5000/api/events/${event._id}/rsvp`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.delete(`${API_BASE}/events/${event._id}/rsvp`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setRsvped(false);
-        setRsvpeCount(res.data.rsvpCount);
+        setRsvpCount(res.data.rsvpCount);
       }
     } catch (err) {
       console.error("RSVP Error:", err.response?.data || err.message);
       alert("RSVP failed: " + (err.response?.data?.msg || "Server Error"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,8 +85,10 @@ export default function EventCard({ event, onDelete, currentUserId }) {
             <button
               onClick={handleRSVP}
               className={`btn btn-${rsvped ? "danger" : "primary"} btn-sm`}
+              disabled={loading}
+              aria-pressed={rsvped}
             >
-              {rsvped ? "Cancel RSVP" : "RSVP"}
+              {loading ? "Processing..." : rsvped ? "Cancel RSVP" : "RSVP"}
             </button>
             <span className="small text-muted">
               🎟️ {rsvpCount} RSVP{rsvpCount !== 1 ? "s" : ""}
