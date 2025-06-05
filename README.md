@@ -1,12 +1,49 @@
-# React + Vite
+# CMETP – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend of the **CMETP** (College Management Event & Tracking Platform) is built with **React.js** using **Vite**. It provides a smooth, responsive, and interactive user experience for managing and viewing events.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- JWT-based user authentication (Login & Signup)
+- Event dashboard with animations using AOS
+- Admin panel to approve/delete events
+- RSVP system with real-time counts
+- Calendar integration to view highlighted event dates
+- Bootstrap 5 styling + responsive layout
+- Axios-based API integration
+- Deployed on **Vercel**
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React.js (with Hooks)
+- Vite
+- Bootstrap 5 & Bootstrap Icons
+- AOS (Animate On Scroll)
+- Axios
+- React Router DOM
+- React Calendar
+
+## 📁 Project Structure
+frontend/
+│
+├── public/
+├── src/
+│ ├── components/ # Navbar, EventCard, Calendar, etc.
+│ ├── pages/ # Dashboard, Login, Signup, etc.
+│ ├── styles/ # CSS files
+│ ├── App.jsx
+│ ├── main.jsx
+├── .env # VITE_BACKEND_URL
+├── package.json
+└── vite.config.js
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in the `frontend` folder:
+
+```env
+VITE_BACKEND_URL=http://localhost:5000
+
+npm install     # Install dependencies
+npm run dev     # Run in development
+npm run build   # Build for production
